@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: first template variable task
+    template:
+      src: first.j2
+      dest: /home/ansible/first
+  - name: second template 
+    template:
+      src: second.j2
+      dest: /home/ansible/second
+  - name: default tomcat7 settings
+    template:
+      src: tomcat7.j2
+      dest: /etc/default/tomcat7
+    notify: "restart all"
+
+  - name: changing users list
+    template:
+      src: tomcat-users.j2
+      dest: "{{ tomcat_users_path }}/tomcat-users.xml"
+    notify: "restart all"
+
+
+  handlers:
+  - name: restart tomcat service
+    service: 
+      name: tomcat7
+      state: restarted
+    listen: restart all
+
+    
+

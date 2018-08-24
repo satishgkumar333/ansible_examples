@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: this will restart apache
+    service: 
+      name: "{{ apache_version }}"
+      state: stopped

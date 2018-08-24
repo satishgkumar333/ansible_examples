@@ -1,0 +1,55 @@
+---
+- hosts: redhat
+  become: yes
+  tasks:
+    - name: download jdk
+      command: wget -O /opt/jdk-8u181-linux-x64.tar.gz https://www.dropbox.com/s/zw3p1ym52dv3sdv/jdk-8u181-linux-x64.tar.gz
+    - name: Extract archive
+      command: chdir=/usr/share /bin/tar xvf /opt/jdk-8u181-linux-x64.tar.gz -C /opt/ creates=/opt/jdk1.8.0_181
+
+    - name: Copy /etc/profile.d/java.sh with content
+      copy:
+        content: |
+                export JAVA_HOME=/opt/jdk1.8.0_181
+                export JRE_HOME=/opt/jdk1.8.0_181/jre
+                export PATH=$PATH:/opt/jdk1.8.0_181/bin:/opt/jdk1.8.0_181/jre/bin
+        dest: /etc/profile.d/java.sh
+    - name: setting system version
+      command: alternatives --install /usr/bin/java java /opt/jdk1.8.0_181/bin/java 2
+    - name: setting system version
+      command: alternatives --set java /opt/jdk1.8.0_181/bin/java
+    - name: sourcing java.sh file
+      action: shell source /etc/profile.d/java.sh
+
+    - name: download maven
+      get_url: 
+        url: http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+        dest: /opt/apache-maven-3.5.4-bin.tar.gz
+    - name:
+      command: chdir=/usr/share /bin/tar xvf /opt/apache-maven-3.5.4-bin.tar.gz -C /opt/ creates=/opt/apache-maven-3.5.4
+
+    - name: Copy /etc/profile.d/maven.sh with content
+      copy:
+        content: |
+                export MAVEN_HOME=/opt/apache-maven-3.5.4
+                export PATH=$PATH:/opt/apache-maven-3.5.4/bin
+        dest: /etc/profile.d/maven.sh 
+    - name: source to system
+      action: shell source /etc/profile.d/maven.sh
+
+    - name: download tomcat
+      get_url:
+        url: http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.33/bin/apache-tomcat-8.5.33.tar.gz
+        dest: /opt/apache-tomcat-8.5.33.tar.gz
+    - name: unzip tomcat
+      command: chdir=/usr/share /bin/tar xvf /opt/apache-tomcat-8.5.33.tar.gz -C /opt/ creates=/opt/apache-tomcat-8.5.33
+
+    - name: start tomcat service
+      command: sh /opt/apache-tomcat-8.5.33/bin/startup.sh
+    - name: download jenkins
+      get_url:
+        url: https://updates.jenkins-ci.org/download/war/2.136/jenkins.war
+        dest: /opt/apache-tomcat-8.5.33/webapps
+    - name: restart tomcat
+      command: sh /opt/apache-tomcat-8.5.33/bin/startup.sh
+    

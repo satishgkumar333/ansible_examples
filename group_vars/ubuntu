@@ -1,0 +1,11 @@
+---
+tomcat_latest: tomcat7
+dest_copy: /home/ansible
+apache_latest: apache2
+username: ansible2
+permsize: 256
+heapsize: 512
+tomcat_users_path: /etc/tomcat7
+wget_version: wget
+git_version: git
+unzip_version: unzip

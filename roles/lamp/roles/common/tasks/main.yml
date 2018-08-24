@@ -1,0 +1,9 @@
+---
+# tasks file for commoni
+- name: update packages on ubuntu
+  command: apt-get update -y
+  when: ansible_os_family == "Debian"
+- name: yum packages on redhat
+  command: yum update -y
+  when: ansible_os_family == "RedHat"
+

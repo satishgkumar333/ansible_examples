@@ -1,0 +1,22 @@
+---
+- hosts: all
+  vars_prompt:
+  - name: "some passwd"
+    prompt: "enter passwd"
+    private: yes
+  tasks:
+  - name: execute any basic linux command
+    command: hostname
+    register: cmd_content
+  - name: print variable contents
+    debug:
+      msg: "{{ cmd_content.stdout }}"
+    when: cmd_content.stderr ==""
+
+  - name: print command error if present
+    debug:
+      msg: "{{cmd_content.stderr}}"
+    when: cmd_content.stderr !=""
+  - debug:
+     msg: "System {{ inventory_hostname }} has uuid {{ ansible_product_uuid}}"
+  

@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: get_url for download jenkins
+    get_url: 
+      url: http://ftp-chi.osuosl.org/pub/jenkins/war-stable/2.121.3/jenkins.war
+      dest: /home/ansible/jenkins.war
+
+

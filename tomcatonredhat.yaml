@@ -1,0 +1,20 @@
+---
+ - hosts: redhat
+   become: yes
+   tasks:
+   - name: creating user tomcat
+     user:
+       name: tomcat
+       state: present
+   - name: install tomcat
+     yum:
+       name: tomcat
+       state: present
+   - name: start tomcat service
+     service:
+       name: tomcat
+       state: started
+   - name: enable service tomcat
+     service: 
+       name: tomcat
+       enabled: yes

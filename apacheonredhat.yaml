@@ -1,0 +1,16 @@
+---
+- hosts: redhat
+  become: yes
+  tasks:
+  - name: this will install httpd
+    yum:
+      name: httpd
+      state: present
+  - name: this will start service
+    service:
+      name: httpd
+      state: started
+  - name: this will enable service
+    service:
+      name: httpd
+      enabled: yes

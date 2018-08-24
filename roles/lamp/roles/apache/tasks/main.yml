@@ -1,0 +1,19 @@
+---
+# tasks file for apache
+  - name: install apache on ubuntu
+    apt:
+      name: "{{ apache_version }}"
+      state: present 
+    notify:
+      - restart apache
+    when: ansible_os_family == "Debian"
+
+  - name: install apache on redhat
+    yum: 
+      name: "{{ apache_version }}"
+      state: present
+    notify: 
+      - restart apache
+    when: ansible_os_family == "RedHat"
+
+  

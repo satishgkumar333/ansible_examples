@@ -1,0 +1,49 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: install "{{ tomcat_latest }}"
+    yum:
+      name: "{{ tomcat_latest }}"
+      state: present
+    notify: "restart all"
+    when: ansible_os_family == "RedHat"
+
+  - name: install "{{ tomcat_latest }}"
+    apt:
+      name: "{{ tomcat_latest }}"
+      state: present
+    notify: "restart all"
+    when: ansible_os_family == "Debian"
+
+  - name: copy file
+    copy: 
+     src: /home/ansible/myinv
+     dest: "{{ dest_copy }}/myinvcopy"
+    notify: "restart all"
+
+  - name: install "{{ apache_latest }}"
+    yum:
+      name: "{{ apache_latest }}"
+      state: present
+    notify: "restart all"
+    when: ansible_os_family == "RedHat"
+
+  - name: install "{{ apache_latest }}"
+    apt:
+      name: "{{ apache_latest }}"
+      state: present
+    notify: "restart all"
+    when: ansible_os_family == "Debian"
+
+  handlers:
+  - name: restart tomcat service
+    service:
+      name: "{{ tomcat_latest }}"
+      state: restarted
+    listen: "restart all"
+  - name: restart apache service
+    service:
+      name: "{{ apache_latest }}"
+      state: restarted
+    listen: "restart all"

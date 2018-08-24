@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: copy module
+    copy:
+      src: /home/ansible/myinv
+      dest: /home/ansible/myinvcopied
+      owner: ansible
+      group: ansible
+      mode: 0777
